@@ -10,19 +10,16 @@ resource "aws_instance" "jenkins-master" {
 resource "aws_security_group" "jenkins-access" {
 	name = "Access to Jenkins by SSH and HTTPS"
 
-	ingress {
-		from_port   = 22
-		to_port     = 22
-		protocol    = "tcp"
-		cidr_blocks = ["0.0.0.0/0"]
-		}
-
-	ingress {
-                from_port   = 8080
-                to_port     = 8080
-                protocol    = "tcp"
-                cidr_blocks = ["0.0.0.0/0"]
-                }
+	dynamic "ingress" {
+		for_each = ["8080", "22"]		
+		content {
+			from_port   = ingress.value
+	                to_port     = ingress.value
+			protocol    = "tcp"
+			cidr_blocks = ["0.0.0.0/0"]
+			}
+		}	
+	
 
 	egress {
                 from_port   = 0
