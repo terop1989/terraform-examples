@@ -5,6 +5,7 @@ resource "aws_instance" "jenkins-master" {
 	instance_type          = "t2.micro"
 	vpc_security_group_ids = [aws_security_group.jenkins-access.id]
 	user_data              = file("install-jenkins.sh")
+	key_name	       = "pair01"
 }
 
 resource "aws_security_group" "jenkins-access" {
